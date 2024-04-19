@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: backend/
+      dockerfile: app.Dockerfile
+      args:
+        - ENV=development
+    entrypoint: [ "python", "-m", "debugpy", "--listen", "0.0.0.0:5678",  "/app/app.py" ]
+
+    volumes:
+      - ./backend:/app
+    ports:
+      - '8000:8000'
+      - '5678:5678'
