@@ -1,5 +1,15 @@
 # UFF Ride (uffride)
 
+## Para simplificar
+Para não precisar de baixar as dependencias na sua maquina
+Basta usar o docker compose com o comando a baixo dentro da pasta:
+```
+docker-compose up --build
+```
+
+Com isso a aplicação executará (verifique o ip que ela executou para ver no navegador)
+---
+
 A Quasar Project
 
 ## Install the dependencies
