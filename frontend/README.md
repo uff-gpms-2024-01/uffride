@@ -8,6 +8,7 @@ docker-compose up --build
 ```
 
 Com isso a aplicação executará (verifique o ip que ela executou para ver no navegador)
+
 ---
 
 A Quasar Project
