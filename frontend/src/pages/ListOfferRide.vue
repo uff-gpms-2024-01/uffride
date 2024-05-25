@@ -152,7 +152,84 @@
 					v-for="ride in rideList"
 					:key="ride.id"
 				>
-					<CardRide :ride="ride" :ride-id="ride.id" />
+					<q-card class="col" flat bordered>
+						<q-card-section>
+							<div class="text-h6 q-mb-xs">
+								{{ ride.name }}
+							</div>
+						</q-card-section>
+
+						<div class="row justify-center">
+							<iframe
+								class="col"
+								width="825"
+								height="350"
+								src="https://www.openstreetmap.org/export/embed.html?bbox=-43.13751697540283%2C-22.91748813005501%2C-43.08155536651611%2C-22.886494722426438&amp;layer=mapnik"
+								style="border: 1px solid black"
+							></iframe>
+						</div>
+
+						<q-card-section class="q-pt-none q-mt-sm">
+							<div class="text-subtitle1">
+								De: {{ ride.where }}・ Para:
+								{{ ride.toWhere }}
+							</div>
+						</q-card-section>
+
+						<q-separator />
+						<q-card-actions>
+							<q-btn
+								flat
+								color="primary"
+								@click="dialogReserver = true"
+							>
+								Oferecer carona
+							</q-btn>
+							<q-dialog v-model="dialogReserver">
+								<q-card>
+									<q-card-section>
+										<div class="text-h6">
+											Deseja oferecer essa carona?
+										</div>
+									</q-card-section>
+
+									<q-card-actions align="right">
+										<q-btn
+											flat
+											label="Não"
+											color="primary"
+											v-close-popup
+										/>
+										<q-btn
+											flat
+											label="Sim"
+											color="primary"
+											@click="reserver"
+										/>
+									</q-card-actions>
+								</q-card>
+							</q-dialog>
+
+							<q-dialog v-model="dialogConfirmReserver">
+								<q-card>
+									<q-card-section>
+										<div class="text-h6">
+											Carona confirmada!
+										</div>
+									</q-card-section>
+
+									<q-card-actions align="right">
+										<q-btn
+											flat
+											label="OK"
+											color="primary"
+											:to="'/'"
+										/>
+									</q-card-actions>
+								</q-card>
+							</q-dialog>
+						</q-card-actions>
+					</q-card>
 				</div>
 			</div>
 			<div
@@ -160,10 +237,11 @@
 			>
 				<div class="row flex-center">
 					<q-btn color="primary" @click="sendRideRequest">
-						Solicitar carona
+						Oferecer carona
 					</q-btn>
-					<q-tooltip class="text-subtitle1">
-						Não encontrou carona? Faça uma solicitação
+					<q-tooltip class="text-subtitle1" max-width="50%">
+						Não encontrou uma carona? Agende sua carona para
+						ficar disponível na lista de caronas oferecidas
 					</q-tooltip>
 
 					<q-dialog ref="rideRequestDialog">
@@ -197,14 +275,19 @@
 <script setup lang="js">
 import { ref, onBeforeMount } from 'vue';
 import { useRideRequestStore } from 'src/stores/RideRequestStore';
-import CardRide from 'src/components/CardRide.vue';
+import {  useRouter } from 'vue-router';
 
+import axios from 'axios';
+
+const router = useRouter();
 const rideRequestStore = ref(useRideRequestStore());
 const nowRice = ref(rideRequestStore.value.nowRice);
 const rideDate = ref(rideRequestStore.value.rideDate);
 const toWhere = ref(rideRequestStore.value.toWhere);
 const where = ref(rideRequestStore.value.where);
 const rideList = ref([]);
+const dialogReserver = ref(false);
+const dialogConfirmReserver = ref(false);
 const rideRequestDialog = ref(null);
 
 /**
@@ -229,27 +312,41 @@ const getRideList = () => {
       "rating": 5,
       "ratingQuantity": 15,
       "availablePlaces": 4,
-      "places": 4,
-			"date" : "13-01-2001",
-			"hour": "09:30"
+      "places": 4
     },
     {
       "id": 2,
       "name": "Juberto",
       "where": "***",
       "toWhere": "***",
-      "rating": 3,
+      "rating": 5,
       "ratingQuantity": 50,
       "availablePlaces": 3,
-      "places": 4,
-			"date" : "13-01-2001",
-			"hour": "09:30"
+      "places": 4
     }
   ]
 }`;
   return JSON.parse(esperado);
 };
 
+/**
+ *
+ * Fazer reserva
+ * @param {*} element
+ */
+const reserver = (element) => {
+	// @TODO chamar a api para fazer a reserva
+    // axios.get('https://webhook.site/9b8728f1-c752-4950-b85c-6042ac7833dd')
+  //   .then(response => {
+  //     riceList = response.data;
+  //   })
+  //   .catch(error => {
+  //     console.error(error);
+  //   });
+  dialogReserver.value = false;
+  dialogConfirmReserver.value = true;
+  // router.push("/");
+};
 
 /**
  * Enviar solicitação de pedido de carona.

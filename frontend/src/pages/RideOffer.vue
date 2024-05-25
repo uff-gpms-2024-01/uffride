@@ -1,6 +1,6 @@
 <template>
 	<q-page class="flex flex-center column">
-		<h1 class="text-h4">Buscar carona</h1>
+		<h1 class="text-h4">Ofereça carona</h1>
 		<div class="row justify-center full-width map">
 			<iframe
 				width="425"
@@ -177,7 +177,7 @@
 								class="row items-center q-pb-none"
 							>
 								<div class="text-h6">
-									Para quantos passageiros?
+									Há quantos espaços disponíveis?
 								</div>
 								<q-space />
 								<q-btn
@@ -286,7 +286,7 @@ const rideSearch = () => {
 	rideRequestStore.value.passengersNumber =
 		passengersNumber;
 	rideRequestStore.value.date = rideDate;
-	router.push('/lista-caronas');
+	router.push('/carona/lista/oferecer');
 };
 
 // codigo de tentativa d eusar a api do openstreetmap

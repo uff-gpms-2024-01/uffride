@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 export const useRideRequestStore = defineStore('ride-request', {
   state() {
     return {
-      where: '',
+			where: '',
       toWhere: '',
       date: '0',
       nowRice: false,

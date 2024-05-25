@@ -8,7 +8,7 @@ services:
       dockerfile: app.Dockerfile
       target: 'develop-stage'
     ports:
-    - '9000:8080'
+    - '9000:9000'
     volumes:
     - '.:/app'
     command: /bin/sh -c "quasar dev - --host"
