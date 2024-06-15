@@ -5,7 +5,7 @@ import os
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///uffride.db"
 db = SQLAlchemy()
-
+from models import *
 
 db.init_app(app)
 
