@@ -1,10 +1,9 @@
 from app import db
-import backend.models.vehicle as vehicle
 
-class ride(db.Model):
+class Ride(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     driver = db.Column(db.String(50), nullable=False)
-    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'), nullable=False)
+    vehicle_id = db.Column(db.Integer, nullable=False)
     start = db.Column(db.String(50), nullable=False)
     end = db.Column(db.String(50), nullable=False)
     status = db.Column(db.String(50), nullable=False)

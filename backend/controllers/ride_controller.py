@@ -1,5 +1,5 @@
 from app import app
-from backend.services import ride_service
+from services import ride_service
 
 @app.route("/ride", methods=["GET"])
 def get(self):
