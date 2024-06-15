@@ -2,7 +2,7 @@ from app import db
 
 class vehicle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    driver_id = db.Column(db.Integer, db.ForeignKey('driver.id'), nullable=False)
+    driver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     num_passangers = db.Column(db.Integer, nullable=False)
     model = db.Column(db.String(50), nullable=False)
     color = db.Column(db.String(50), nullable=False)
@@ -18,3 +18,12 @@ class vehicle(db.Model):
         }
     def __repr__(self):
         return '<Vehicle %r>' % self.id
+    
+    def __init__(self,dicio):
+        super().__init__()
+        self.id = dicio["id"]
+        self.driver_id = dicio["driver_id"]
+        self.model = dicio["model"]
+        self.num_passangers = dicio["num_passangers"]
+        self.color = dicio["color"]
+        self.license_plate = dicio["license_plate"]
