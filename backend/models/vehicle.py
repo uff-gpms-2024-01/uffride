@@ -18,3 +18,12 @@ class Vehicle(db.Model):
         }
     def __repr__(self):
         return '<Vehicle %r>' % self.id
+    
+    def __init__(self,dicio):
+        super().__init__()
+        self.id = dicio["id"]
+        self.driver_id = dicio["driver_id"]
+        self.model = dicio["model"]
+        self.num_passangers = dicio["num_passangers"]
+        self.color = dicio["color"]
+        self.license_plate = dicio["license_plate"]
