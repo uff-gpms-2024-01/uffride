@@ -12,5 +12,3 @@ def index():
 if __name__ == "__main__":
     debug = os.environ["FLASK_ENV"] == "development"
     app.run(debug=True, host='0.0.0.0', port=8000)
-
-import backend.controllers.ride_controller as ride_controller
