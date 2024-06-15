@@ -1,5 +1,6 @@
 from app import db
 
+
 class Vehicle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     driver_id = db.Column(db.Integer, nullable=False)
@@ -7,6 +8,7 @@ class Vehicle(db.Model):
     model = db.Column(db.String(50), nullable=False)
     color = db.Column(db.String(50), nullable=False)
     license_plate = db.Column(db.String(50), nullable=False)
+
     def to_dict(self):
         return {
             "id": self.id,
@@ -16,10 +18,11 @@ class Vehicle(db.Model):
             "color": self.color,
             "license_plate": self.license_plate,
         }
+
     def __repr__(self):
-        return '<Vehicle %r>' % self.id
-    
-    def __init__(self,dicio):
+        return "<Vehicle %r>" % self.id
+
+    def __init__(self, dicio):
         super().__init__()
         self.id = dicio["id"]
         self.driver_id = dicio["driver_id"]
