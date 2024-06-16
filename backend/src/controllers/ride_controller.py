@@ -1,5 +1,5 @@
-from app import app
-from services import ride_service
+from src import app
+from src.services import ride_service
 
 
 @app.route("/ride", methods=["GET"])
