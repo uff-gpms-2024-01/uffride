@@ -18,8 +18,10 @@ migrate = Migrate(app, db)
 db.init_app(app)
 
 from src.controllers.user_controller import user_bp  # noqa: E402
+from src.controllers.user_rating_controller import user_rating 
 
 app.register_blueprint(user_bp, url_prefix="/api")
+app.register_blueprint(user_rating, url_prefix="/api")
 
 from src.models.user import User  # noqa: E402
 
