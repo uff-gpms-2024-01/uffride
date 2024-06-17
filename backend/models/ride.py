@@ -1,12 +1,9 @@
 from app import db
-import models.vehicle as vehicle
 
-class ride(db.Model):
-    __tablename__ = 'ride'
-
+class Ride(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    driver = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'), nullable=False)
+    driver = db.Column(db.Integer, nullable=False)
+    vehicle_id = db.Column(db.Integer, nullable=False)
     start = db.Column(db.String(50), nullable=False)
     end = db.Column(db.String(50), nullable=False)
     status = db.Column(db.String(50), nullable=False)

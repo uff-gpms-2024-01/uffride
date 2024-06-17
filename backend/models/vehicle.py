@@ -1,8 +1,8 @@
 from app import db
 
-class vehicle(db.Model):
+class Vehicle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    driver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    driver_id = db.Column(db.Integer, nullable=False)
     num_passangers = db.Column(db.Integer, nullable=False)
     model = db.Column(db.String(50), nullable=False)
     color = db.Column(db.String(50), nullable=False)

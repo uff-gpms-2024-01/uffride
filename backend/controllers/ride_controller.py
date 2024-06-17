@@ -1,6 +1,5 @@
 from app import app
 from services import ride_service
-from flask import request
 
 @app.route("/ride/<int:id>", methods=["GET"])
 def get(id):
