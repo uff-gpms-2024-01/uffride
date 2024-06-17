@@ -23,7 +23,7 @@ def upgrade():
     sa.Column('driver', sa.Integer(), nullable=False),
     sa.Column('vehicle_id', sa.Integer(), nullable=False),
     sa.Column('start', sa.String(length=50), nullable=False),
-    sa.Column('end', sa.String(length=50), nullable=False),
+    sa.Column('end', sa.String(length=50), nullable=True),
     sa.Column('status', sa.String(length=50), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
