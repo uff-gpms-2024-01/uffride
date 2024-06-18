@@ -218,6 +218,7 @@ import { ref } from 'vue';
 import { useRideRequestStore } from 'src/stores/RideRequestStore';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import LOCALS from 'src/constants/locals';
 
 defineOptions({
 	name: 'IndexPage',
@@ -241,7 +242,7 @@ const resultAxios = ref('');
 /**
  * Variável teste da openStreetMap
  */
-const locateOptions = ref([]);
+const locateOptions = ref(LOCALS);
 const setModel = ref('');
 
 const formattedCurrentDate = `${currentDate.getDate()}/${currentDate.getMonth()}/${currentDate.getFullYear()}`;
