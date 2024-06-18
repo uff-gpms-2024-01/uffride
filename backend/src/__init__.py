@@ -29,9 +29,15 @@ login_manager.login_view = "accounts.login"
 login_manager.login_message_category = "danger"
 
 
+# enable CORS
+@app.after_request
+def after_request(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+    return response
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.filter(User.id == int(user_id)).first()
-
-
-#
