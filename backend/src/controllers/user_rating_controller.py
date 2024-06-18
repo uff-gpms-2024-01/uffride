@@ -17,9 +17,9 @@ def post():
     id_user = data['id_user']
     id_ride = data['id_ride']
     rating = data['rating']
-
+    
     # Create a new UserRating object
-    new_rating = UserRating(id_user=id_user, id_ride=id_ride, rating=rating)
+    new_rating = UserRating(data)
 
     # Add the new object to the session
         
