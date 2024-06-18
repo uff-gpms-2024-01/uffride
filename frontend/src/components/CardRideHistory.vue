@@ -44,33 +44,86 @@
 				>
 			</div>
 			<div class="text">
-				Saída:
-				Data <span class="text-bold">{{ ride.date }}</span>
-				|
+				Saída: Data
+				<span claszs="text-bold">{{ ride.date }}</span> |
 				Hora <span class="text-bold">{{ ride.hour }}</span>
 			</div>
+			<div v-if="ride.userRating">
+				<p class="q-mb-none q-mt-sm">Sua avaliação:</p>
+				<q-rating
+					size="30px"
+					v-model="ride.userRating"
+					:max="5"
+					color="primary"
+					readonly
+				/>
+			</div>
 		</q-card-section>
+
+		<q-card-actions
+			v-if="!ride.userRating"
+			class="justify-center"
+		>
+			<q-btn flat color="primary" @click="assess = true">
+				Avaliar
+			</q-btn>
+			<q-dialog v-model="assess">
+				<q-card style="min-width: 350px">
+					<q-card-section>
+						<div class="text-h6">
+							O que você achou da corrida?
+						</div>
+					</q-card-section>
+
+					<q-card-section
+						class="q-pt-none row justify-center"
+					>
+						<q-rating
+							size="40px"
+							v-model="userRating"
+							:max="5"
+							color="primary"
+						/>
+					</q-card-section>
+
+					<q-card-actions
+						align="right"
+						class="text-primary"
+					>
+						<q-btn
+							flat
+							label="Avaliar"
+							@click="toAssess"
+							v-close-popup
+						/>
+					</q-card-actions>
+				</q-card>
+			</q-dialog>
+		</q-card-actions>
 	</q-card>
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps, onMounted, ref } from 'vue';
 import axios from 'axios';
 
 const dialogReserver = ref(false);
 const dialogConfirmReserver = ref(false);
 const rideRequestDialog = ref(null);
 const dialogDriveProfile = ref(null);
+const assess = ref(0);
+const userRating = ref('');
 const props = defineProps({
 	ride: {
 		type: Object,
-		required: true,
+		required: true
 	},
 	id: {
 		type: Number,
 		required: true
 	}
 });
+const ride = ref({ ...props.ride });
 
 /**
  *
@@ -89,5 +142,22 @@ const reserver = (element) => {
 	dialogReserver.value = false;
 	dialogConfirmReserver.value = true;
 	// router.push("/");
+};
+
+const toAssess = () => {
+	// @TODO chamar a api para guarda a avaliação
+	axios
+		.post('http://localhost:8000/api/user-rating/', {
+			id_ride: props.ride.id,
+			id_user: props.id,
+			rating: userRating.value
+		})
+		.then((response) => {
+			console.log(response);
+			ride.value.userRating = userRating;
+		})
+		.catch((error) => {
+			console.error(error);
+		});
 };
 </script>

@@ -11,7 +11,8 @@
 		</div>
 
 		<q-form
-			@submit="onSubmit"
+			@submit="handleOnSubmit"
+			
 			class="q-gutter-md full-width q-mt-sm"
 		>
 			<div class="row justify-center">
@@ -19,14 +20,12 @@
 					rounded
 					outlined
 					v-model="where"
-					:model-value="setModel"
 					use-input
 					hide-selected
 					fill-input
 					input-debounce="0"
 					label="De onde?"
 					:options="locateOptions"
-					@filter="filterFn"
 					behavior="menu"
 					:rules="[
 						(val) => !!val || 'Campo não pode está vazio',
@@ -63,7 +62,6 @@
 					input-debounce="0"
 					label="Para onde?"
 					:options="locateOptions"
-					@filter="filterFn"
 					behavior="menu"
 					:rules="[
 						(val) => !!val || 'Campo não pode está vazio',
@@ -171,42 +169,7 @@
 						class="full-width"
 						@click="stepNext = true"
 					/>
-					<q-dialog v-model="stepNext">
-						<q-card>
-							<q-card-section
-								class="row items-center q-pb-none"
-							>
-								<div class="text-h6">
-									Há quantos espaços disponíveis?
-								</div>
-								<q-space />
-								<q-btn
-									icon="close"
-									flat
-									round
-									dense
-									v-close-popup
-								/>
-							</q-card-section>
-
-							<q-card-section>
-								<q-slider
-									v-model="passengersNumber"
-									marker-labels
-									:min="1"
-									:max="6"
-								/>
-							</q-card-section>
-							<q-card-actions>
-								<q-btn
-									label="Buscar"
-									type="submit"
-									color="primary"
-									@click="rideSearch"
-								></q-btn>
-							</q-card-actions>
-						</q-card>
-					</q-dialog>
+									
 				</div>
 			</div>
 		</q-form>
@@ -218,16 +181,22 @@ import { ref } from 'vue';
 import { useRideRequestStore } from 'src/stores/RideRequestStore';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-
+import locals from 'src/constants/locals';
+import BASE_URL_API from 'src/constants/baseUrl';
 defineOptions({
 	name: 'IndexPage',
 });
+
 
 const router = useRouter();
 const rideRequestStore = ref(useRideRequestStore());
 const where = ref('');
 const toWhere = ref('');
+
+
 const stepNext = ref(false);
+
+console.log(where, toWhere);
 /**
  * Carona para agora?
  */
@@ -241,7 +210,7 @@ const resultAxios = ref('');
 /**
  * Variável teste da openStreetMap
  */
-const locateOptions = ref([]);
+const locateOptions = ref(locals.map((local) => local.name));
 const setModel = ref('');
 
 const formattedCurrentDate = `${currentDate.getDate()}/${currentDate.getMonth()}/${currentDate.getFullYear()}`;
@@ -277,31 +246,55 @@ const optionsFn = (date) => {
 	}
 };
 
+
 /**
- * Add dados no Store
+ * Handle submit
  */
-const rideSearch = () => {
-	rideRequestStore.value.where = where;
-	rideRequestStore.value.toWhere = toWhere;
-	rideRequestStore.value.passengersNumber =
-		passengersNumber;
-	rideRequestStore.value.date = rideDate;
-	router.push('/carona/lista/oferecer');
+const handleOnSubmit = () => {
+
+	
+
+	let data = {
+		where_address: where.value,
+		where_lat: locals.find((local) => local.name === where.value).latitude,
+		where_long: locals.find((local) => local.name === where.value).longitude,
+		to_where_address: toWhere.value,
+		to_where_lat: locals.find((local) => local.name === toWhere.value).latitude,
+		to_where_long: locals.find((local) => local.name === toWhere.value).longitude,
+	};
+	
+
+	if (nowRice.value) {
+		data.rideDate = formattedCurrentDate + ' ' + currentDate.getHours() + ':' + currentDate.getMinutes();
+	}
+
+	data['driver'] = 1;
+	data['vehicle_id'] = 1;
+
+	requestOfferRide(data);
+
 };
 
-// codigo de tentativa d eusar a api do openstreetmap
-const searchLocate = async () => {
+/**
+ * Request offer ride
+ * @param {*} data
+ */
+
+const requestOfferRide = async (data) => {
 	try {
-		const wordSearch = where.value.replace(/ /g, '%20');
-		const response = await axios.get(
-			`https://nominatim.openstreetmap.org/search?q=${wordSearch}&limit=2&format=json`
-		);
-		resultAxios.value = response;
-		locateOptions.value.push(resultAxios);
+		const response = await axios.post(BASE_URL_API + '/api/ride/offer', data);
+		if (response.status !== 200) {
+			alert('Erro ao oferecer carona');
+			return;
+		}
+		alert('Carona oferecida com sucesso!');
+		router.push('/carona/lista/oferecer');
 	} catch (error) {
 		console.error('Erro ao buscar dados:', error);
 	}
 };
+
+
 </script>
 
 <style>
