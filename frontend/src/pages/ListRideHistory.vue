@@ -1,49 +1,59 @@
 <template>
-	<q-page class="flex column">
-		<div class="row justify-center full-width map">
+	<q-page class="col-12 items-center">
+		<div class="col-12 col-md-6 items-center">
 			<div
-				class="row justify-center q-gutter-y-lg q-my-xl q-mx-lg"
+				class="col items-center q-gutter-y-lg q-my-xl q-mx-lg q-px-lg"
 			>
-				<span class="text-subtitle2 text-grey-9"
+				<span
+					class="row justify-center text-subtitle2 text-grey-9"
 					>Carona em andamento</span
 				>
 
 				<span
 					v-if="!rideCurrentList.length"
-					class="text-h1 text-grey-4"
+					class="row text-h1 text-grey-4"
 				>
 					Nada encontrado
 				</span>
 
 				<div
-					class="row full-width"
+					class="row justify-center"
 					v-for="ride in rideCurrentList"
 					:key="ride.id"
 				>
-					<CardRideCurrent :ride="ride" :rideId="ride.id" />
+					<CardRideCurrent
+						class="col-12 col-md-6"
+						:ride="ride"
+						:rideId="ride.id"
+					/>
 				</div>
 			</div>
 
 			<div
-				class="row justify-center q-gutter-y-lg q-my-xl q-mx-lg"
+				class="col items-center col items-center q-gutter-y-lg q-my-xl q-mx-lg q-px-lg"
 			>
-				<span class="text-subtitle2 text-grey-9"
+				<span
+					class="row justify-center text-subtitle2 text-grey-9"
 					>Histórico</span
 				>
 
 				<span
 					v-if="!rideList.length"
-					class="text-h1 text-grey-4"
+					class="row text-h1 text-grey-4"
 				>
 					Nada encontrado
 				</span>
 
 				<div
-					class="row full-width"
+					class="row justify-center"
 					v-for="ride in rideList"
 					:key="ride.id"
 				>
-					<CardRideHistory :ride="ride" />
+					<CardRideHistory
+						:ride="ride"
+						:id="4"
+						class="col-12 col-md-6"
+					/>
 				</div>
 			</div>
 			<div class="q-my-md"></div>
@@ -78,6 +88,7 @@ const rideCurrentList = ref([]);
       "name": "Afredo",
       "where": "***",
       "toWhere": "***",
+			"userRating": 2,
       "rating": 5,
       "ratingQuantity": 15,
       "availablePlaces": 4,
@@ -90,6 +101,7 @@ const rideCurrentList = ref([]);
       "name": "Juberto",
       "where": "***",
       "toWhere": "***",
+			"userRating": null,
       "rating": 3,
       "ratingQuantity": 50,
       "availablePlaces": 3,

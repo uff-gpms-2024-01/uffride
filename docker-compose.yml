@@ -7,7 +7,9 @@ services:
       dockerfile: app.Dockerfile
       args:
         - ENV=development
-    entrypoint: [ "python", "-m", "debugpy", "--listen", "0.0.0.0:5678",  "/app/app.py" ]
+    entrypoint: [ /bin/sh, -c, "flask db upgrade && python -m debugpy --listen 0.0.0.0:5678  /app/manage.py --app src run --host 0.0.0.0"]
+    env_file:
+      - backend/.env
 
     volumes:
       - ./backend:/app
