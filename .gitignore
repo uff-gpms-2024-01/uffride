@@ -4,4 +4,4 @@ __pycache__/
 *$py.class
 backend/instance/*
 */**/.env
-backend/version/*
+backend/migrations/versions/*
