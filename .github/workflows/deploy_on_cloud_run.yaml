@@ -30,4 +30,4 @@ jobs:
           export_default_credentials: true
     
       - name: Deploy to Cloud Run
-        run: gcloud run deploy uffride --image ${{ secrets.DOCKER_USERNAME }}/uffride:latest --platform managed --region us-central1 --allow-unauthenticated --suffix ${{ github.sha }} --update-env-vars "GITHUB_SHA=${{ github.sha }}" --update-env-vars "GITHUB_REF=${{ github.ref }}"
+        run: gcloud run deploy sandbox-uffride --image ${{ secrets.DOCKER_USERNAME }}/uffride:latest --platform managed --region us-central1 --allow-unauthenticated --revision-suffix ${{ github.sha }}
