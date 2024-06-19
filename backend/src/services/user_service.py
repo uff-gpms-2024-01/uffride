@@ -1,4 +1,4 @@
-from requests import request
+# from requests import request
 from src import bcrypt,db
 from src.models import User
 from flask import jsonify
@@ -20,9 +20,8 @@ def get_all_users():
         return "No users found"
 
 
-def update_user(user_id):
+def update_user(user_id, data):
     try:
-        data = request.json
         update_data = {}
 
         if "email" in data:

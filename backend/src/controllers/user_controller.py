@@ -7,6 +7,7 @@ from flask import (
 from flask_login import login_required, login_user, logout_user, current_user
 from src import bcrypt, db
 from src.models import User
+from src.services import user_service
 
 
 user_bp = Blueprint("user", __name__)
@@ -63,11 +64,11 @@ def logout():
     flash("You were logged out.", "success")
     return jsonify({"message": "You were logged out."})
 
-@user_bp.route("/user/<int:user_id>", methods=["GET"])
+@user_bp.route("/user/<user_id>", methods=["GET"])
 @login_required
 def get(user_id):
-    user = User.query.get_user(user_id)
-    return jsonify(user.to_dict())
+    user = user_service.get_user(user_id)
+    return jsonify(user)
 
 
 '''@user_bp.route("/user/list", methods=["GET"])
@@ -98,7 +99,8 @@ def search_users():
 @user_bp.route("/user/<int:user_id>", methods=["PUT"])
 @login_required
 def update_user(user_id):
-    user = User.query.get_or_404(user_id)
+    data = request.get_json()
+    user = user_service.update_user(user_id, data)
     if user != current_user:
         return jsonify({"message": "You can only update your own profile."}), 403
     return update_user(user_id)
