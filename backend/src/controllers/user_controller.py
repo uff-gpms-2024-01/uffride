@@ -62,3 +62,43 @@ def logout():
     logout_user()
     flash("You were logged out.", "success")
     return jsonify({"message": "You were logged out."})
+
+@user_bp.route("/user/<int:user_id>", methods=["GET"])
+@login_required
+def get(user_id):
+    user = User.query.get_user(user_id)
+    return jsonify(user.to_dict())
+
+
+'''@user_bp.route("/user/list", methods=["GET"])
+@login_required
+def list_users():
+    users = User.get_all_users()
+    users_list = [user.to_dict() for user in users]
+    return jsonify(users_list)'''
+
+
+'''
+@user_bp.route("/users/search", methods=["GET"])
+@login_required
+def search_users():
+    query_param = request.args.get("q")
+    if not query_param:
+        return jsonify({"message": "Query parameter 'q' is required."}), 400
+    
+    users = User.query.filter(
+        (User.email.ilike(f"%{query_param}%")) |
+        (User.name.ilike(f"%{query_param}%"))
+    ).all()
+    users_list = [user.to_dict() for user in users]
+    return jsonify(users_list)
+    '''
+
+
+@user_bp.route("/user/<int:user_id>", methods=["PUT"])
+@login_required
+def update_user(user_id):
+    user = User.query.get_or_404(user_id)
+    if user != current_user:
+        return jsonify({"message": "You can only update your own profile."}), 403
+    return update_user(user_id)
