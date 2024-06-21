@@ -24,11 +24,10 @@ def update_user(user_id, data):
     try:
         update_data = {}
 
-        if "email" in data:
-            update_data["email"] = data["email"]
+        if "password" in data:
+            update_data["password"] = data["password"]
         if "name" in data:
             update_data["name"] = data["name"]
-
         User.query.filter_by(id=user_id).update(update_data)
         db.session.commit()
         return jsonify({"message": "User updated successfully"}), 200
