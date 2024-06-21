@@ -47,10 +47,14 @@ def login():
         return jsonify(current_user.to_dict())
 
     user = User.query.filter_by(email=request.json.get("email")).first()
-    if not user and not bcrypt.check_password_hash(
-        user.password, request.form["password"]
+
+    if not user or not bcrypt.check_password_hash(
+        user.password, request.json.get("password")
     ):
-        return jsonify({"message": "Invalid email or password."}), 401
+        return (
+            jsonify({"message": "Não há usuário para as credenciais fornecidas."}),
+            401,
+        )
     login_user(user, force=True)
     flash("You were logged in.", "success")
     return jsonify(user.to_dict())

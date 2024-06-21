@@ -29,7 +29,7 @@ app.register_blueprint(user_rating, url_prefix="/api")
 
 from src.models.user import User  # noqa: E402
 
-login_manager.login_view = "accounts.login"
+login_manager.login_view = "user.login"
 login_manager.login_message_category = "danger"
 
 
