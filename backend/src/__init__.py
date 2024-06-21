@@ -1,5 +1,5 @@
 from decouple import config
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
@@ -31,6 +31,14 @@ from src.models.user import User  # noqa: E402
 
 login_manager.login_view = "user.login"
 login_manager.login_message_category = "danger"
+
+@app.route('/')
+def index():
+    return send_from_directory(app.static_folder, 'index.html')
+
+@app.route('/<path:path>')
+def static_files(path):
+    return send_from_directory(app.static_folder, path)
 
 
 # enable CORS
