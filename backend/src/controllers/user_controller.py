@@ -1,8 +1,6 @@
-import re
 from flask import (
     Blueprint,
     flash,
-    redirect,
     request,
     jsonify,
 )
@@ -42,11 +40,8 @@ def register():
     return jsonify(user.to_dict())
 
 
-@user_bp.route("/user/login", methods=["POST", "GET"])
+@user_bp.route("/user/login", methods=["POST"])
 def login():
-    if request.method == "GET":
-        return redirect("/#/login")
-
     if current_user.is_authenticated:
         flash("You are already logged in.", "info")
         return jsonify(current_user.to_dict())

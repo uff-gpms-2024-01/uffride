@@ -21,7 +21,7 @@ db.init_app(app)
 
 from src.controllers.ride_controller import ride_bp  # noqa: E402
 from src.controllers.user_controller import user_bp  # noqa: E402
-from src.controllers.user_rating_controller import user_rating  # noqa: E402
+from src.controllers.user_rating_controller import user_rating
 
 app.register_blueprint(user_bp, url_prefix="/api")
 app.register_blueprint(ride_bp, url_prefix="/api")
@@ -32,13 +32,11 @@ from src.models.user import User  # noqa: E402
 login_manager.login_view = "user.login"
 login_manager.login_message_category = "danger"
 
-
-@app.route("/")
+@app.route('/')
 def index():
-    return send_from_directory(app.static_folder, "index.html")
+    return send_from_directory(app.static_folder, 'index.html')
 
-
-@app.route("/<path:path>")
+@app.route('/<path:path>')
 def static_files(path):
     return send_from_directory(app.static_folder, path)
 
