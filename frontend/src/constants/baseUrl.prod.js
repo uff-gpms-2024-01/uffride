@@ -1,0 +1,1 @@
+export default 'https://sandbox-uffride-2cxzrk4q7a-uc.a.run.app';
