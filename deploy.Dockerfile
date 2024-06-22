@@ -6,7 +6,7 @@ WORKDIR /app
 COPY frontend/package*.json ./
 RUN npm install
 COPY frontend/ .
-RUN npm run build
+RUN cp -f src/constants/baseUrl.prod.js src/constants/baseUrl.js && npm run build
 
 FROM python:3.9-slim
 
