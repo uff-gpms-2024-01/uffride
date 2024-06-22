@@ -180,9 +180,9 @@
 import { ref } from 'vue';
 import { useRideRequestStore } from 'src/stores/RideRequestStore';
 import { useRouter } from 'vue-router';
+import baseUrl from 'src/constants/baseUrl';
 import axios from 'axios';
 import locals from 'src/constants/locals';
-import BASE_URL_API from 'src/constants/baseUrl';
 defineOptions({
 	name: 'IndexPage',
 });
@@ -282,7 +282,7 @@ const handleOnSubmit = () => {
 
 const requestOfferRide = async (data) => {
 	try {
-		const response = await axios.post(BASE_URL_API + '/api/ride/offer', data);
+		const response = await axios.post(baseUrl + '/api/ride/offer', data);
 		if (response.status !== 200) {
 			alert('Erro ao oferecer carona');
 			return;
