@@ -97,7 +97,7 @@
 }
 </style>
 
-<script setup lang="js">
+<script setup >
 import { ref } from 'vue';
 
 const isPwd = ref(true);
