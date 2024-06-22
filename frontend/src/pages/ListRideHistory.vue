@@ -51,6 +51,7 @@
 				>
 					<CardRideHistory
 						:ride="ride"
+						:id="4"
 						class="col-12 col-md-6"
 					/>
 				</div>
@@ -100,7 +101,7 @@ const rideCurrentList = ref([]);
       "name": "Juberto",
       "where": "***",
       "toWhere": "***",
-			"userRating": 4,
+			"userRating": null,
       "rating": 3,
       "ratingQuantity": 50,
       "availablePlaces": 3,

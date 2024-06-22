@@ -4,6 +4,7 @@
 			<div class="row justify-center q-mt-sm q-gutter-x-sm">
 				<div class="col">
 					<q-select
+						id="where"
 						rounded
 						outlined
 						v-model="where"
@@ -33,6 +34,10 @@
 								</q-item-section>
 							</q-item>
 						</template>
+						
+						
+						
+
 					</q-select>
 				</div>
 
@@ -283,12 +288,15 @@ const router = useRouter();
 const rideRequestStore = ref(useRideRequestStore());
 const nowRice = ref(rideRequestStore.value.nowRice);
 const rideDate = ref(rideRequestStore.value.rideDate);
-const toWhere = ref(rideRequestStore.value.toWhere);
-const where = ref(rideRequestStore.value.where);
+const toWhere = ref("");
+const where = ref("");
 const rideList = ref([]);
 const dialogReserver = ref(false);
 const dialogConfirmReserver = ref(false);
 const rideRequestDialog = ref(null);
+
+console.log(where, toWhere);
+
 
 /**
  * Faz requisição ao back end para pegar as corridas
