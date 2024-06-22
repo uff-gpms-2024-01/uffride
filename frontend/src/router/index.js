@@ -11,6 +11,10 @@ import routes from './routes'
  * with the Router instance.
  */
 
+import { useUserStore } from 'src/stores/User';
+
+const userStore = useUserStore();
+
 export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
@@ -26,5 +30,15 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
+  Router.beforeEach((to, from) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      const isAutenticated = userStore.isLogged
+      if (!isAutenticated && to.path !== '/login') {
+        return '/login'
+      }}
+  })
+
   return Router
 })
+
+
