@@ -48,26 +48,13 @@
 				<span claszs="text-bold">{{ ride.date }}</span> |
 				Hora <span class="text-bold">{{ ride.hour }}</span>
 			</div>
-			<div v-if="ride.userRating">
-				<p class="q-mb-none q-mt-sm">Sua avaliação:</p>
-				<q-rating
-					size="30px"
-					v-model="ride.userRating"
-					:max="5"
-					color="primary"
-					readonly
-				/>
-			</div>
 		</q-card-section>
 
-		<q-card-actions
-			v-if="!ride.userRating"
-			class="justify-center"
-		>
+		<q-card-actions class="justify-center">
 			<q-btn flat color="primary" @click="assess = true">
 				Avaliar
 			</q-btn>
-			<q-dialog v-model="assess">
+			<q-dialog v-model="assess" persistent>
 				<q-card style="min-width: 350px">
 					<q-card-section>
 						<div class="text-h6">
@@ -104,7 +91,7 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, ref } from 'vue';
+import { defineProps, ref } from 'vue';
 import axios from 'axios';
 
 const dialogReserver = ref(false);
@@ -116,14 +103,13 @@ const userRating = ref('');
 const props = defineProps({
 	ride: {
 		type: Object,
-		required: true
+		required: true,
 	},
 	id: {
 		type: Number,
-		required: true
-	}
+		required: true,
+	},
 });
-const ride = ref({ ...props.ride });
 
 /**
  *
@@ -144,20 +130,14 @@ const reserver = (element) => {
 	// router.push("/");
 };
 
-const toAssess = () => {
+const toAssess = (userRating) => {
 	// @TODO chamar a api para guarda a avaliação
-	axios
-		.post('http://localhost:8000/api/user-rating/', {
-			id_ride: props.ride.id,
-			id_user: props.id,
-			rating: userRating.value
-		})
-		.then((response) => {
-			console.log(response);
-			ride.value.userRating = userRating;
-		})
-		.catch((error) => {
-			console.error(error);
-		});
+	// axios.get('https://webhook.site/9b8728f1-c752-4950-b85c-6042ac7833dd')
+	//   .then(response => {
+	//     ride.userRating = userRating;
+	//   })
+	//   .catch(error => {
+	//     console.error(error);
+	//   });
 };
 </script>

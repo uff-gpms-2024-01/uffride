@@ -7,3 +7,7 @@ RUN pip install --upgrade pip
 RUN if [ "$ENV" = "development" ]; then pip install debugpy; fi
 
 RUN pip install -r requirements.txt
+
+ENV FLASK_APP=app
+ENV FLASK_ENV=$ENV
+CMD ["python","app.py"]

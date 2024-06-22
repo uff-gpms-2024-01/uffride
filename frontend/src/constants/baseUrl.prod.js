@@ -1,1 +1,0 @@
-export default BASE_URL_API = '';

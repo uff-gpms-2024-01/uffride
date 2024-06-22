@@ -2,6 +2,3 @@
 __pycache__/
 *.py[cod]
 *$py.class
-backend/instance/*
-*/**/.env
-backend/migrations/versions/*

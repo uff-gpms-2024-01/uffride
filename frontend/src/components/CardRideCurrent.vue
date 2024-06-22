@@ -114,7 +114,6 @@
 import { defineProps, ref } from 'vue';
 import axios from 'axios';
 import { useRide } from 'src/composables/rideComposable';
-import locals from 'src/constants/locals';
 
 const { isDriver } = useRide();
 const dialogReserver = ref(false);
