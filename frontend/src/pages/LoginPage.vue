@@ -9,7 +9,7 @@
 				type="text"
 				rounded
 				outlined
-				label="Usuário:"
+				label="Email:"
 				lazy-rules
 				v-model="userName"
 				:rules="[(val) => !!val || 'Campo não pode está vazio']"
@@ -35,15 +35,13 @@
 
 			<div class="row justify-center">
 				<div class="col-5">
-					<RouterLink to="/">
-						<q-btn
+					<q-btn
 							rounded
 							label="Entrar"
 							type="submit"
 							color="primary"
 							class="full-width"
 						/>
-					</RouterLink>
 				</div>
 			</div>
 		</q-form>
@@ -65,15 +63,38 @@
 
 <script setup lang="js">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+import BASE_URL_API from 'src/constants/baseUrl';
 
 const isPwd = ref(true);
 const userName = ref('');
 const password = ref('');
-/**
- * Login
- */
+ 
+const router = useRouter();
+
  const onSubmit = () => {
-	// @TODO Criar chamada api para login
-	console.log("oi");
+	  requestLogin();
+};
+
+
+const requestLogin = async () => {
+		const loginForm = {
+			email: userName.value,
+			password: password.value,
+		};
+		
+		axios.post(BASE_URL_API + '/api/user/login', loginForm).then((response) => {
+			if (response.status !== 200) {
+				alert(response.text);
+				return;
+			}
+			console.log(response)
+			window.localStorage.setItem('user', JSON.stringify(response.data));
+			router.push('/');
+		}).catch((error) => {
+			console.log(error);
+			alert(`Erro ao fazer login: ${error.response.data.message}`);
+		});
 };
 </script>
