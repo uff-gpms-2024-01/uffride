@@ -11,7 +11,6 @@ import routes from './routes'
  * with the Router instance.
  */
 
-
 export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
@@ -27,15 +26,5 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
-  Router.beforeEach((to, from) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-      const isAutenticated = window.localStorage.getItem('user') !== null
-      if (!isAutenticated && to.path !== '/login') {
-        return '/login'
-      }}
-  })
-
   return Router
 })
-
-
