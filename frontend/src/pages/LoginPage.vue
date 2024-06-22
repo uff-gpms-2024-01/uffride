@@ -66,12 +66,10 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import BASE_URL_API from 'src/constants/baseUrl';
-import { useUserStore } from 'src/stores/User';
 
 const isPwd = ref(true);
 const userName = ref('');
 const password = ref('');
-const {setUser} = useUserStore();
  
 const router = useRouter();
 
@@ -81,7 +79,6 @@ const router = useRouter();
 
 
 const requestLogin = async () => {
-
 		const loginForm = {
 			email: userName.value,
 			password: password.value,
@@ -93,15 +90,11 @@ const requestLogin = async () => {
 				return;
 			}
 			console.log(response)
-			setUser(response.data);
+			window.localStorage.setItem('user', JSON.stringify(response.data));
 			router.push('/');
 		}).catch((error) => {
 			console.log(error);
 			alert(`Erro ao fazer login: ${error.response.data.message}`);
 		});
-		
-
-
-	
 };
 </script>
