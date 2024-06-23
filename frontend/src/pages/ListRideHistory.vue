@@ -61,7 +61,7 @@
 	</q-page>
 </template>
 
-<script setup lang="js">
+<script setup >
 import { ref, onBeforeMount } from 'vue';
 import CardRideHistory from 'src/components/CardRideHistory.vue';
 import CardRideCurrent from 'src/components/CardRideCurrent.vue';

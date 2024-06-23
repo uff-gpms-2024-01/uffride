@@ -9,7 +9,8 @@ const routes = [
 			{ path: '/lista-caronas', component: () => import('pages/ListRidePage.vue') },
 			{ path: '/carona/lista/oferecer', component: () => import('pages/ListOfferRide.vue') },
 			{ path: '/carona/lista/history', component: () => import('pages/ListRideHistory.vue') }
-		]
+		],
+		meta: { requiresAuth: true }
 	},
 
 	{
@@ -17,7 +18,8 @@ const routes = [
 		component: () => import('layouts/AuthenticateLayout.vue'),
 		children: [
 			{ path: '', component: () => import('pages/LoginPage.vue') }
-		]
+		],
+
 	},
 
 	{
@@ -25,7 +27,7 @@ const routes = [
 		component: () => import('layouts/AuthenticateLayout.vue'),
 		children: [
 			{ path: '', component: () => import('pages/RegistroPage.vue') }
-		]
+		],
 	},
 
 	// Always leave this as last one,
@@ -34,10 +36,6 @@ const routes = [
 		path: '/:catchAll(.*)*',
 		component: () => import('pages/ErrorNotFound.vue')
 	},
-	{
-		path: '/login',
-		component: () => import('pages/LoginPage.vue')
-	}
 ];
 
 export default routes;

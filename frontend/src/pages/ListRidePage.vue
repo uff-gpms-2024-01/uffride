@@ -194,7 +194,7 @@
 	</q-page>
 </template>
 
-<script setup lang="js">
+<script setup >
 import { ref, onBeforeMount } from 'vue';
 import { useRideRequestStore } from 'src/stores/RideRequestStore';
 import CardRide from 'src/components/CardRide.vue';
