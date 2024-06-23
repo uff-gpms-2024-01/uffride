@@ -1,6 +1,7 @@
 from src import db
-from src.models import Ride,User
+from src.models import Ride,User,UserRating
 from datetime import datetime
+import random
 from sqlalchemy import desc
 
 
@@ -13,45 +14,47 @@ def get_ride(ride_id):
 
 def get_current_rides():
     try:
+        places = random.randint(1, 4)
         ride = Ride.query.order_by(desc('created_at')).first()
         ride = ride.to_dict()
         new_ride = {}
         new_ride["id"] = ride["id"]
-        new_ride["name"] = "Jerson"#User.query.filter_by(id=ride["driver"]).first().name
+        new_ride["name"] = User.query.filter_by(id=ride["driver"]).first().name
         new_ride["where"] = ride["where_address"]
         new_ride["toWhere"] = ride["to_where_address"]
-        new_ride["ratingQuantity"] = 15
-        new_ride["avaiablePlaces"] = 4
-        new_ride["rating"] = 3
-        new_ride["places"] = 4
-        new_ride["date"] = "13-01-2001"
-        new_ride["hour"] = "09:30"
+        new_ride["ratingQuantity"] = random.randint(1, 23)
+        new_ride["avaiablePlaces"] = places
+        new_ride["rating"] = UserRating.query.filter_by(id_ride=ride["id"]).first().rating
+        new_ride["places"] = random.randint(1, places)
+        new_ride["date"] = Ride.query.filter_by(id=ride["id"]).first().created_at.strftime("%d-%m-%Y")
+        new_ride["hour"] = Ride.query.filter_by(id=ride["id"]).first().created_at.strftime("%H:%M")
         return new_ride
     except Exception:
         return "Ride not found"
 
 def get_all_rides():
-    #try:
+    try:
         rides = Ride.query.all()
         rides_list = [ride.to_dict() for ride in rides]
         response = []
         for ride in rides_list:
+            places = random.randint(1, 4)
             new_ride = {}
             new_ride["id"] = ride["id"]
-            new_ride["name"] = "Jerson"#User.query.filter_by(id=ride["driver"]).first().name
+            new_ride["name"] = User.query.filter_by(id=ride["driver"]).first().name
             new_ride["where"] = ride["where_address"]
             new_ride["toWhere"] = ride["to_where_address"]
-            new_ride["userRating"] = 5#User.query.filter_by(id=ride["driver"]).first().name
-            new_ride["ratingQuantity"] = 15
-            new_ride["avaiablePlaces"] = 4
-            new_ride["rating"] = 3
-            new_ride["places"] = 4
-            new_ride["date"] = "13-01-2001"
-            new_ride["hour"] = "09:30"
+            new_ride["userRating"] = UserRating.query.filter_by(id_ride=ride["id"]).first().rating
+            new_ride["ratingQuantity"] = random.randint(1, 23)
+            new_ride["avaiablePlaces"] = places
+            new_ride["rating"] = random.randint(1, 5)
+            new_ride["places"] = random.randint(1, places)
+            new_ride["date"] = Ride.query.filter_by(id=ride["id"]).first().created_at.strftime("%d-%m-%Y")
+            new_ride["hour"] = Ride.query.filter_by(id=ride["id"]).first().created_at.strftime("%H:%M")
             response.append(new_ride)
         return response
-    #except Exception:
-    #    return "No rides found"
+    except Exception:
+        return "No rides found"
 
 
 def add_ride(ride_json):
