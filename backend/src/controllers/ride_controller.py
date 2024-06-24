@@ -43,7 +43,6 @@ def delete(id):
 
 
 @ride_bp.route("/ride/offer", methods=["POST"])
-@login_required
 def offer_ride():
     where_address = request.json.get("where_address")
     where_lat = request.json.get("where_lat")
@@ -71,8 +70,8 @@ def offer_ride():
 
 
 @ride_bp.route("/ride/request", methods=["POST"])
-@login_required
 def request_ride():
+    user_id = request.json.get("user_id")
     where_address = request.json.get("where_address")
     where_lat = request.json.get("where_lat")
     where_long = request.json.get("where_long")
@@ -95,7 +94,7 @@ def request_ride():
         to_where_lat=to_where_lat,
         to_where_long=to_where_long,
         number_of_passengers=number_of_passengers,
-        user_id=current_user.id,
+        user_id=int(user_id),
     )
 
     return (jsonify(requested_ride)), 201

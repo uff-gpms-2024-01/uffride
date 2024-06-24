@@ -1,4 +1,5 @@
 from src import db
+from sqlalchemy import Column
 from datetime import datetime
 from sqlalchemy.orm import mapped_column, relationship, Mapped
 from typing import List
@@ -54,14 +55,18 @@ class Ride(db.Model):
 class RidePassenger(db.Model):
     __tablename__ = "ride_passenger"
 
-    ride_id: Mapped[int] = mapped_column(ForeignKey("ride.id"), primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), primary_key=True)
+    # int auto increment id
+    id = db.Column(db.Integer, primary_key=True)
+    ride_id: Mapped[int] = mapped_column(ForeignKey("ride.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    impersonated = db.Column(db.Boolean, default=False)
 
     ride = relationship("Ride", back_populates="passengers")
 
-    def __init__(self, ride_id: int, user_id: int):
+    def __init__(self, ride_id: int, user_id: int, impersonated: bool = False):
         self.ride_id = ride_id
         self.user_id = user_id
+        self.impersonated = impersonated
 
     def to_dict(self) -> dict:
         return self.ride.to_dict()

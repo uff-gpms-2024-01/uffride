@@ -32,9 +32,13 @@ class RequestRideService:
 
                 request_ride_transaction.session.add(ride)
                 request_ride_transaction.session.flush()
+                passenger = RidePassenger(ride_id=ride.id, user_id=user_id)
+                request_ride_transaction.session.add(passenger)
 
-                for _ in range(number_of_passengers):
-                    passenger = RidePassenger(ride_id=ride.id, user_id=user_id)
+                for _ in range(number_of_passengers - 1):
+                    passenger = RidePassenger(
+                        ride_id=ride.id, user_id=user_id, impersonated=True
+                    )
                     request_ride_transaction.session.add(passenger)
 
             except SQLAlchemyError as e:
