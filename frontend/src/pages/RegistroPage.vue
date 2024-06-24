@@ -97,8 +97,11 @@
 }
 </style>
 
-<script setup lang="js">
+<script setup >
 import { ref } from 'vue';
+import axios from 'axios';
+import BASE_URL_API from 'src/constants/baseUrl';
+import { useRouter } from 'vue-router';
 
 const isPwd = ref(true);
 const userName = ref('');
@@ -106,11 +109,33 @@ const userEmail = ref('');
 const password = ref('');
 const confirmPassword = ref('');
 
+const router = useRouter();
+
 /**
  * Criação de usuário
  */
 const onSubmit = () => {
-	// @TODO criar envio de formulário
-	console.log("oi");
+	
+	createUser();
+};
+const createUser = async () => {
+		const createUserForm = {
+			email: userEmail.value,
+			password: password.value,
+			name: userName.value,
+		};
+		
+		axios.post(BASE_URL_API + '/api/user/register', createUserForm).then((response) => {
+			if (response.status !== 201) {
+				alert(response.text);
+				return;
+			}
+			window.localStorage.setItem('user', JSON.stringify(response.data));
+			window.localStorage.setItem('user_id', response.data.id);
+			router.push('/');
+		}).catch((error) => {
+			console.log(error);
+			alert(`Erro ao cadastrar: ${error.response.data.message}`);
+		});
 };
 </script>

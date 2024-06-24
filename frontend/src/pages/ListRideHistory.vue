@@ -10,7 +10,7 @@
 				>
 
 				<span
-					v-if="!rideCurrentList.length"
+					v-if="!rideCurrentList"
 					class="row text-h1 text-grey-4"
 				>
 					Nada encontrado
@@ -18,13 +18,13 @@
 
 				<div
 					class="row justify-center"
-					v-for="ride in rideCurrentList"
-					:key="ride.id"
+					:key="rideCurrentList.id"
+
 				>
 					<CardRideCurrent
 						class="col-12 col-md-6"
-						:ride="ride"
-						:rideId="ride.id"
+						:ride="rideCurrentList"
+						:rideId="rideCurrentList.id"
 					/>
 				</div>
 			</div>
@@ -61,10 +61,12 @@
 	</q-page>
 </template>
 
-<script setup lang="js">
+<script setup >
 import { ref, onBeforeMount } from 'vue';
 import CardRideHistory from 'src/components/CardRideHistory.vue';
 import CardRideCurrent from 'src/components/CardRideCurrent.vue';
+import axios from 'axios';
+import BASE_URL_API from 'src/constants/baseUrl';
 
 const rideList = ref([]);
 const rideCurrentList = ref([]);
@@ -73,81 +75,46 @@ const rideCurrentList = ref([]);
  * Faz requisição ao back end para pegar as corridas
  * @returns {object}
  */
- const getRideHitoryList = () => {
-  // axios.get('https://webhook.site/9b8728f1-c752-4950-b85c-6042ac7833dd')
-  //   .then(response => {
-  //     riceList = response.data;
-  //   })
-  //   .catch(error => {
-  //     console.error(error);
-  //   });
-    const esperado = `{
-  "data": [
-    {
-      "id": 1,
-      "name": "Afredo",
-      "where": "***",
-      "toWhere": "***",
-			"userRating": 2,
-      "rating": 5,
-      "ratingQuantity": 15,
-      "availablePlaces": 4,
-      "places": 4,
-			"date" : "13-01-2001",
-			"hour": "09:30"
-    },
-    {
-      "id": 2,
-      "name": "Juberto",
-      "where": "***",
-      "toWhere": "***",
-			"userRating": null,
-      "rating": 3,
-      "ratingQuantity": 50,
-      "availablePlaces": 3,
-      "places": 4,
-			"date" : "13-01-2001",
-			"hour": "09:30"
-    }
-  ]
-}`;
-  return JSON.parse(esperado);
+
+
+
+ const getRideHitoryList = async () => {
+	
+	try {
+		const response = await axios.get(BASE_URL_API + '/api/rides');
+		if (response.status !== 200) {
+			alert('Erro ao listar caronas');
+			return;
+		}
+		return response.data;
+	} catch (error) {
+		console.error('Erro ao buscar dados:', error);
+	}
 };
 
 /**
  * Faz requisição ao back end para pegar as corridas
- * @returns {object}
  */
- const getRideCurrentList = () => {
-  // axios.get('https://webhook.site/9b8728f1-c752-4950-b85c-6042ac7833dd')
-  //   .then(response => {
-  //     riceList = response.data;
-  //   })
-  //   .catch(error => {
-  //     console.error(error);
-  //   });
-    const esperado = `{
-  "data": [
-    {
-      "id": 1,
-      "name": "Afredo",
-      "where": "***",
-      "toWhere": "***",
-      "rating": 5,
-      "ratingQuantity": 15,
-      "availablePlaces": 4,
-      "places": 4,
-			"date" : "13-02-2025",
-			"hour": "09:30"
-    }
-  ]
-}`;
-  return JSON.parse(esperado);
+ const getRideCurrentList = async () => {
+	
+	try {
+		const response = await axios.get(BASE_URL_API + '/api/ride/current');
+		if (response.status !== 200) {
+			alert('Erro ao listar caronas');
+			return;
+		}
+
+		return response.data;
+	} catch (error) {
+		console.error('Erro ao buscar dados:', error);
+	}
 };
 
-onBeforeMount(() => {
-  rideList.value = getRideHitoryList().data;
-	rideCurrentList.value = getRideCurrentList().data;
+onBeforeMount( async () => {
+	
+  	rideList.value = await getRideHitoryList();
+	rideCurrentList.value =  await getRideCurrentList();
+
 });
 </script>
 

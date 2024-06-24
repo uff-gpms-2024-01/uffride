@@ -106,6 +106,7 @@
 <script setup>
 import { defineProps, onMounted, ref } from 'vue';
 import axios from 'axios';
+import baseUrl from 'src/constants/baseUrl';
 
 const dialogReserver = ref(false);
 const dialogConfirmReserver = ref(false);
@@ -147,7 +148,7 @@ const reserver = (element) => {
 const toAssess = () => {
 	// @TODO chamar a api para guarda a avaliação
 	axios
-		.post('http://localhost:8000/api/user-rating/', {
+		.post(baseUrl + '/api/user-rating/', {
 			id_ride: props.ride.id,
 			id_user: props.id,
 			rating: userRating.value

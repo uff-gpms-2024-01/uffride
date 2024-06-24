@@ -1,6 +1,8 @@
+import re
 from flask import (
     Blueprint,
     flash,
+    redirect,
     request,
     jsonify,
 )
@@ -38,27 +40,33 @@ def register():
     login_user(user, force=True)
     flash("You registered and are now logged in. Welcome!", "success")
 
-    return jsonify(user.to_dict())
+    return jsonify(user.to_dict()), 201
 
 
-@user_bp.route("/user/login", methods=["POST"])
+@user_bp.route("/user/login", methods=["POST", "GET"])
 def login():
+    if request.method == "GET":
+        return redirect("/#/login")
+
     if current_user.is_authenticated:
         flash("You are already logged in.", "info")
         return jsonify(current_user.to_dict())
 
     user = User.query.filter_by(email=request.json.get("email")).first()
-    if not user and not bcrypt.check_password_hash(
-        user.password, request.form["password"]
+
+    if not user or not bcrypt.check_password_hash(
+        user.password, request.json.get("password")
     ):
-        return jsonify({"message": "Invalid email or password."}), 401
+        return (
+            jsonify({"message": "Não há usuário para as credenciais fornecidas."}),
+            401,
+        )
     login_user(user, force=True)
     flash("You were logged in.", "success")
     return jsonify(user.to_dict())
 
 
 @user_bp.route("/user/logout")
-@login_required
 def logout():
     logout_user()
     flash("You were logged out.", "success")
