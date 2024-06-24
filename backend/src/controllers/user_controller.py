@@ -65,7 +65,7 @@ def logout():
     return jsonify({"message": "You were logged out."})
 
 @user_bp.route("/user/<user_id>", methods=["GET"])
-# @login_required
+@login_required
 def get(user_id):
     user = user_service.get_user(user_id)
     return jsonify(user)
@@ -97,7 +97,7 @@ def search_users():
 
 
 @user_bp.route("/user/<int:user_id>", methods=["PUT"])
-# @login_required
+@login_required
 def update_user(user_id):
     data = request.get_json()
     print(data)
