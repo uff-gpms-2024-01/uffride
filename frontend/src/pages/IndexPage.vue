@@ -1,6 +1,6 @@
 <template>
 	<q-page class="flex flex-center column">
-		<h1 class="text-h4">Buscar carona</h1>
+		<h1 class="text-h4">Pedir carona</h1>
 		<div class="row justify-center full-width map">
 			<iframe
 				width="425"
@@ -11,15 +11,14 @@
 		</div>
 
 		<q-form
-			@submit="onSubmit"
+			@submit.prevent="onSubmit"
 			class="q-gutter-md full-width q-mt-sm"
 		>
 			<div class="row justify-center">
 				<q-select
 					rounded
 					outlined
-					v-model="where"
-					:model-value="setModel"
+					v-model="fromWhere"
 					use-input
 					hide-selected
 					fill-input
@@ -194,7 +193,7 @@
 									v-model="passengersNumber"
 									marker-labels
 									:min="1"
-									:max="6"
+									:max="4"
 								/>
 							</q-card-section>
 							<q-card-actions>
@@ -226,7 +225,7 @@ defineOptions({
 
 const router = useRouter();
 const rideRequestStore = ref(useRideRequestStore());
-const where = ref('');
+const fromWhere = ref('');
 const toWhere = ref('');
 const stepNext = ref(false);
 /**
@@ -242,7 +241,7 @@ const resultAxios = ref('');
 /**
  * Variável teste da openStreetMap
  */
-const locateOptions = ref(LOCALS);
+const locateOptions = ref(LOCALS.map((local) => local.name));
 const setModel = ref('');
 
 const formattedCurrentDate = `${currentDate.getDate()}/${currentDate.getMonth()}/${currentDate.getFullYear()}`;
@@ -282,7 +281,7 @@ const optionsFn = (date) => {
  * Add dados no Store
  */
 const rideSearch = () => {
-	rideRequestStore.value.where = where;
+	rideRequestStore.value.where = fromWhere;
 	rideRequestStore.value.toWhere = toWhere;
 	rideRequestStore.value.passengersNumber =
 		passengersNumber;
