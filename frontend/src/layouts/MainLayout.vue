@@ -14,6 +14,7 @@
 				<q-toolbar-title class="text-center">
 					<RouterLink to="/">UFF Ride</RouterLink>
 				</q-toolbar-title>
+				<q-btn push color="white" text-color="primary" label="Sair" @click="logout" />
 			</q-toolbar>
 		</q-header>
 
@@ -51,6 +52,7 @@
 <script setup>
 import { ref } from 'vue';
 import EssentialLink from 'components/EssentialLink.vue';
+import { useRouter } from 'vue-router';
 
 defineOptions({
 	name: 'MainLayout',
@@ -88,9 +90,18 @@ const settingsList = [
 
 const leftDrawerOpen = ref(false);
 
+const router = useRouter();
+
 function toggleLeftDrawer() {
 	leftDrawerOpen.value = !leftDrawerOpen.value;
 }
+
+const logout = () => {
+	window.localStorage.removeItem('user_id');
+	window.localStorage.removeItem('user');	
+	router.push('/login');
+};
+
 </script>
 
 <style>

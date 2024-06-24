@@ -91,6 +91,7 @@ const requestLogin = async () => {
 			}
 			console.log(response)
 			window.localStorage.setItem('user', JSON.stringify(response.data));
+			window.localStorage.setItem('user_id', response.data.id);
 			router.push('/');
 		}).catch((error) => {
 			console.log(error);

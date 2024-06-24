@@ -11,7 +11,7 @@
 		</div>
 
 		<q-form
-			@submit.prevent="onSubmit"
+			@submit="handleOnSubmit"
 			class="q-gutter-md full-width q-mt-sm"
 		>
 			<div class="row justify-center">
@@ -162,50 +162,19 @@
 
 			<div class="row justify-center">
 				<div class="col-3 col-md-1">
-					<!-- @TODO remover @click para submit para que valide o formulário antes do envio -->
-					<q-btn
-						label="Continuar"
-						type="submit"
-						color="primary"
-						class="full-width"
-						@click="stepNext = true"
-					/>
-					<q-dialog v-model="stepNext">
-						<q-card>
-							<q-card-section
-								class="row items-center q-pb-none"
-							>
-								<div class="text-h6">
-									Para quantos passageiros?
-								</div>
-								<q-space />
-								<q-btn
-									icon="close"
-									flat
-									round
-									dense
-									v-close-popup
-								/>
-							</q-card-section>
-
-							<q-card-section>
-								<q-slider
+					<span>Selecione a quantidade de passageiros:</span>
+					<q-slider
 									v-model="passengersNumber"
 									marker-labels
 									:min="1"
 									:max="4"
 								/>
-							</q-card-section>
-							<q-card-actions>
 								<q-btn
-									label="Buscar"
-									type="submit"
-									color="primary"
-									@click="rideSearch"
-								></q-btn>
-							</q-card-actions>
-						</q-card>
-					</q-dialog>
+						label="Continuar"
+						type="submit"
+						color="primary"
+						class="full-width"
+					/>
 				</div>
 			</div>
 		</q-form>
@@ -218,13 +187,13 @@ import { useRideRequestStore } from 'src/stores/RideRequestStore';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import LOCALS from 'src/constants/locals';
+import baseUrl from 'src/constants/baseUrl';
 
 defineOptions({
 	name: 'IndexPage',
 });
 
 const router = useRouter();
-const rideRequestStore = ref(useRideRequestStore());
 const fromWhere = ref('');
 const toWhere = ref('');
 const stepNext = ref(false);
@@ -234,13 +203,7 @@ const stepNext = ref(false);
 const nowRice = ref(false);
 const passengersNumber = ref(1);
 const currentDate = new Date();
-/**
- * Variável teste da openStreetMap
- */
-const resultAxios = ref('');
-/**
- * Variável teste da openStreetMap
- */
+
 const locateOptions = ref(LOCALS.map((local) => local.name));
 const setModel = ref('');
 
@@ -277,31 +240,35 @@ const optionsFn = (date) => {
 	}
 };
 
-/**
- * Add dados no Store
- */
-const rideSearch = () => {
-	rideRequestStore.value.where = fromWhere;
-	rideRequestStore.value.toWhere = toWhere;
-	rideRequestStore.value.passengersNumber =
-		passengersNumber;
-	rideRequestStore.value.date = rideDate;
-	router.push('/lista-caronas');
+
+const handleOnSubmit = () => {
+let data = {
+	where_address: fromWhere.value,
+	where_lat: LOCALS.find((local) => local.name === fromWhere.value).latitude,
+	where_long: LOCALS.find((local) => local.name === fromWhere.value).longitude,
+	to_where_address: toWhere.value,
+	to_where_lat: LOCALS.find((local) => local.name === toWhere.value).latitude,
+	to_where_long: LOCALS.find((local) => local.name === toWhere.value).longitude,
+	number_of_passengers: passengersNumber.value,
+	user_id: window.localStorage.getItem("user_id")
+};
+requestRide(data);
+
+};
+const requestRide = async (data) => {
+try {
+	const response = await axios.post(baseUrl + '/api/ride/request', data);
+	if (response.status !== 201) {
+		alert('Erro ao requisitar carona');
+		return;
+	}
+	alert('Carona requisitada com sucesso!');
+	router.push('/carona/lista/history');
+} catch (error) {
+	console.error('Erro ao buscar dados:', error);
+}
 };
 
-// codigo de tentativa d eusar a api do openstreetmap
-const searchLocate = async () => {
-	try {
-		const wordSearch = where.value.replace(/ /g, '%20');
-		const response = await axios.get(
-			`https://nominatim.openstreetmap.org/search?q=${wordSearch}&limit=2&format=json`
-		);
-		resultAxios.value = response;
-		locateOptions.value.push(resultAxios);
-	} catch (error) {
-		console.error('Erro ao buscar dados:', error);
-	}
-};
 </script>
 
 <style>
