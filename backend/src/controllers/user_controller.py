@@ -39,7 +39,7 @@ def register():
     login_user(user, force=True)
     flash("You registered and are now logged in. Welcome!", "success")
 
-    return jsonify(user.to_dict())
+    return jsonify(user.to_dict()), 201
 
 
 @user_bp.route("/user/login", methods=["POST", "GET"])
@@ -66,7 +66,6 @@ def login():
 
 
 @user_bp.route("/user/logout")
-@login_required
 def logout():
     logout_user()
     flash("You were logged out.", "success")
