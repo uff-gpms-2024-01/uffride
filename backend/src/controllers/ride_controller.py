@@ -77,6 +77,12 @@ def request_ride():
     to_where_lat = request.json.get("to_where_lat")
     to_where_long = request.json.get("to_where_long")
 
+    number_of_passengers = request.json.get("number_of_passengers")
+    try:
+        number_of_passengers = int(number_of_passengers)
+    except ValueError:
+        return jsonify({"error": "number_of_passengers must be an integer"}), 400
+
     requested_ride = RequestRideService().request_ride(
         where_address=where_address,
         where_lat=where_lat,
@@ -84,6 +90,7 @@ def request_ride():
         to_where_address=to_where_address,
         to_where_lat=to_where_lat,
         to_where_long=to_where_long,
+        number_of_passengers=number_of_passengers,
         user_id=current_user.id,
     )
 

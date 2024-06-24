@@ -13,6 +13,7 @@ class RequestRideService:
         to_where_address,
         to_where_lat,
         to_where_long,
+        number_of_passengers,
         user_id,
     ):
 
@@ -32,9 +33,9 @@ class RequestRideService:
                 request_ride_transaction.session.add(ride)
                 request_ride_transaction.session.flush()
 
-                passenger = RidePassenger(ride_id=ride.id, user_id=user_id)
-
-                request_ride_transaction.session.add(passenger)
+                for _ in range(number_of_passengers):
+                    passenger = RidePassenger(ride_id=ride.id, user_id=user_id)
+                    request_ride_transaction.session.add(passenger)
 
             except SQLAlchemyError as e:
                 request_ride_transaction.session.rollback()
