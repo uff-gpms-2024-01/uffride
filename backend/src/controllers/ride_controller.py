@@ -1,6 +1,5 @@
 from flask import (
     Blueprint,
-    flash,
     request,
     jsonify,
 )
@@ -18,7 +17,12 @@ def get(id):
     return jsonify(ride_service.get_ride(id))
 
 
-@ride_bp.route("/ride", methods=["GET"])
+@ride_bp.route("/ride/current", methods=["GET"])
+def get_current():
+    return jsonify(ride_service.get_current_rides())
+
+
+@ride_bp.route("/rides", methods=["GET"])
 def getAll():
     return jsonify(ride_service.get_all_rides())
 
