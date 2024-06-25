@@ -1,4 +1,3 @@
-import pytest
 from .testconf import client
 
 def test_offer_ride(client):
@@ -9,8 +8,9 @@ def test_offer_ride(client):
         "to_where_address": "Rua B",
         "to_where_lat": 0,
         "to_where_long": 0,
-        "driver": "João",
+        "driver": 1,
         "vehicle_id": 1
     })
 
     assert response.status_code == 200
+
