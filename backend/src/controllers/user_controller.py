@@ -22,6 +22,8 @@ def register():
         return jsonify(current_user.to_dict())
 
     def validate(json):
+        if not User.query.filter_by(email=json.get("email")).first():
+            return False, "Email já cadastrado."
         return True, ""
 
     is_valid, errors = validate(request.json)
